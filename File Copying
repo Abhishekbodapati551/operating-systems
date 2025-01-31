@@ -1,0 +1,33 @@
+#include <stdio.h> 
+typedef struct  
+{ 
+    int id, burst_time, waiting_time, turnaround_time; 
+}Process; 
+void calculateTimes(Process p[], int n)  
+{ 
+    p[0].waiting_time = 0; 
+    for (int i = 1; i < n; i++) 
+    { 
+        p[i].waiting_time = p[i - 1].waiting_time + p[i - 1].burst_time; 
+    } 
+    for (int i = 0; i < n; i++)  
+    { 
+        p[i].turnaround_time = p[i].waiting_time + p[i].burst_time; 
+    } 
+} 
+void printProcesses(Process p[], int n)  
+{ 
+    printf("ID\tBurst Time\tWaiting Time\tTurnaround Time\n"); 
+    for (int i = 0; i < n; i++) 
+    { 
+        printf("%d\t%d\t\t%d\t\t%d\n", p[i].id, p[i].burst_time, p[i].waiting_time, p[i].turnaround_time); 
+    } 
+} 
+int main()  
+{ 
+    Process p[] = {{1, 5}, {2, 3}, {3, 8}}; 
+    int n = sizeof(p) / sizeof(p[0]); 
+    calculateTimes(p, n); 
+    printProcesses(p, n); 
+    return 0; 
+} 
