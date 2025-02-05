@@ -1,0 +1,43 @@
+#include <stdio.h>
+int main()
+{
+    int n, i, j, time, quantum;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    int burst[n], wait[n], turn[n];
+    printf("Enter burst times:\n");
+    for(i = 0; i < n; i++)
+    {
+        scanf("%d", &burst[i]);
+    }
+    printf("Enter time quantum: ");
+    scanf("%d", &quantum);
+    for(time = 0; ; time += quantum) 
+    {
+        int done = 1;
+        for(i = 0; i < n; i++) 
+        {
+            if(burst[i] > 0)
+            {
+                done = 0;
+                if(burst[i] > quantum) 
+                {
+                    burst[i] -= quantum;
+                }
+                else
+                {
+                    wait[i] = time;
+                    turn[i] = time + burst[i];
+                    burst[i] = 0;
+                }
+            }
+        }
+        if(done) break;
+    }
+    printf("Process\tWaiting Time\tTurnaround Time\n");
+    for(i = 0; i < n; i++)
+    {
+        printf("%d\t%d\t\t%d\n", i + 1, wait[i], turn[i]);
+    }
+    return 0;
+}
