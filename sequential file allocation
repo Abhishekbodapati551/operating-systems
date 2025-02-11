@@ -1,0 +1,110 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h> 
+ 
+#define MAX_FILES 10 
+#define MAX_DISK_SIZE 100 
+ 
+typedef struct { 
+    char name[20]; // File name 
+    int start;     // Start block 
+    int length;    // Number of blocks 
+} File; 
+ 
+File directory[MAX_FILES];  // Array to store files 
+int fileCount = 0; 
+int disk[MAX_DISK_SIZE] = {0}; // Simulating disk blocks (0 = free, 1 = occupied) 
+ 
+// Function to create a file with sequential allocation 
+void createFile() { 
+    if (fileCount >= MAX_FILES) { 
+        printf("Error: Maximum file limit reached!\n"); 
+        return; 
+    } 
+ 
+    char fileName[20]; 
+    int start, length, i; 
+ 
+    printf("Enter file name: "); 
+    scanf("%s", fileName); 
+    printf("Enter start block: "); 
+    scanf("%d", &start); 
+    printf("Enter number of blocks: "); 
+    scanf("%d", &length); 
+ 
+    // Check if blocks are free 
+    for (i = start; i < start + length; i++) { 
+        if (i >= MAX_DISK_SIZE || disk[i] == 1) { 
+            printf("Error: Blocks not available or out of bounds!\n"); 
+            return; 
+        } 
+    } 
+ 
+    // Allocate blocks 
+    for (i = start; i < start + length; i++) { 
+        disk[i] = 1; 
+    } 
+ 
+    // Store file details 
+    strcpy(directory[fileCount].name, fileName); 
+    directory[fileCount].start = start; 
+    directory[fileCount].length = length; 
+    fileCount++; 
+ 
+    printf("File created successfully!\n"); 
+} 
+ 
+// Function to display allocated files 
+void displayFiles() { 
+    if (fileCount == 0) { 
+        printf("No files allocated.\n"); 
+        return; 
+    } 
+ 
+    printf("\nFile Allocation Table:\n"); 
+    printf("---------------------------------\n"); 
+    printf("File Name\tStart Block\tLength\n"); 
+    printf("---------------------------------\n"); 
+    for (int i = 0; i < fileCount; i++) { 
+        printf("%s\t\t%d\t\t%d\n", directory[i].name, directory[i].start, directory[i].length); 
+    } 
+    printf("---------------------------------\n"); 
+} 
+ 
+// Function to search for a file 
+void searchFile() { 
+    char fileName[20]; 
+    printf("Enter file name to search: "); 
+    scanf("%s", fileName); 
+ 
+    for (int i = 0; i < fileCount; i++) { 
+        if (strcmp(directory[i].name, fileName) == 0) { 
+            printf("File found: %s\n", directory[i].name); 
+            printf("Start Block: %d, Length: %d\n", directory[i].start, directory[i].length); 
+            return; 
+        } 
+    } 
+    printf("File not found!\n"); 
+} 
+ 
+int main() { 
+    int choice; 
+    while (1) { 
+        printf("\nSequential File Allocation Menu:\n"); 
+        printf("1. Create File\n"); 
+        printf("2. Display Files\n"); 
+        printf("3. Search File\n"); 
+        printf("4. Exit\n"); 
+        printf("Enter your choice: "); 
+        scanf("%d", &choice); 
+ 
+        switch (choice) { 
+            case 1: createFile(); break; 
+            case 2: displayFiles(); break; 
+            case 3: searchFile(); break; 
+            case 4: exit(0); 
+            default: printf("Invalid choice! Try again.\n"); 
+        } 
+    } 
+    return 0; 
+}
