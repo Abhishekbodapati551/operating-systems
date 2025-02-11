@@ -1,0 +1,25 @@
+#include <stdio.h> 
+#define FRAME_SIZE 3 
+#define PAGE_COUNT 5 
+int main() { 
+ int pages[PAGE_COUNT] = {0, 1, 2, 3, 4}; 
+ int frames[FRAME_SIZE] = {-1, -1, -1}; 
+ int pageFaults = 0, i, j, k; 
+ for (i = 0; i < PAGE_COUNT; i++) { 
+     int found = 0; 
+     for (j = 0; j < FRAME_SIZE; j++) { 
+         if (frames[j] == pages[i]) { 
+             found = 1; break; 
+         } 
+     } 
+     if (!found) { 
+            frames[pageFaults % FRAME_SIZE] = pages[i]; 
+            pageFaults++; 
+     } 
+        printf("Page: %d | Frames: ", pages[i]); 
+     for (k = 0; k < FRAME_SIZE; k++) printf("%d ", frames[k]); 
+        printf("\n"); 
+ } 
+ printf("Total Page Faults: %d\n", pageFaults); 
+ return 0; 
+}
