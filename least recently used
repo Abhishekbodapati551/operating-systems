@@ -1,0 +1,28 @@
+#include <stdio.h> 
+  
+int main() { 
+ int pages[10], frame[3], n, m, i, j, k, pos, flag, pageFaults = 0; 
+ printf("Enter number of pages: "); 
+    scanf("%d", &n); 
+ printf("Enter pages: "); 
+ for (i = 0; i < n; i++) scanf("%d", &pages[i]); 
+  
+ for (i = 0; i < 3; i++) frame[i] = -1; 
+  
+ for (i = 0; i < n; i++) { 
+     flag = 0; 
+     for (j = 0; j < 3; j++) if (frame[j] == pages[i]) flag = 1; 
+     if (!flag) { 
+            pageFaults++; 
+         pos = -1; 
+         for (j = 0; j < 3; j++) { 
+             if (frame[j] == -1) { pos = j; break; } 
+             for (k = i - 1; k >= 0; k--) if (frame[j] == pages[k]) { pos = j; break; } 
+         } 
+         if (pos == -1) pos = 0; 
+         frame[pos] = pages[i]; 
+     } 
+ } 
+ printf("Page Faults: %d\n", pageFaults); 
+ return 0; 
+}
